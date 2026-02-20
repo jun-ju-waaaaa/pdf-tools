@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- ホーム -->
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/</loc>
     <priority>1.0</priority>
   </url>
 
+  <!-- 使い方 -->
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/guide/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/guide/</loc>
     <priority>0.8</priority>
   </url>
 
+  <!-- FAQ -->
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/faq/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/faq/</loc>
     <priority>0.8</priority>
   </url>
 
+  <!-- 運営者情報 -->
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/about/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/about/</loc>
     <priority>0.6</priority>
   </url>
 
+  <!-- お問い合わせ -->
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/pdf-compressor/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/contact/</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- プライバシーポリシー -->
+  <url>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/privacy/</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ツール類（PDF圧縮・JPEG変換） -->
+  <url>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/pdf-compressor/</loc>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://jun-ju-waaaaa.github.io/jpeg-converter/</loc>
+    <loc>https://jun-ju-waaaaa.github.io/pdf-tools/jpeg-converter/</loc>
     <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://jun-ju-waaaaa.github.io/contact/</loc>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://jun-ju-waaaaa.github.io/privacy/</loc>
-    <priority>0.6</priority>
   </url>
 
 </urlset>

@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+Allow: /pdf-tools/
 
-Sitemap: https://jun-ju-waaaaa.github.io/sitemap.xml
+Sitemap: https://jun-ju-waaaaa.github.io/pdf-tools/sitemap.xml
