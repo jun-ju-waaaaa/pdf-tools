@@ -1,374 +1,94 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="google-site-verification" content="cblGyKe8u_P_jGL-Jqw0_tqURcwRZ_4dW379GVVuG0c" />
+
+  <title>PDFオンラインツール｜PDF圧縮・PDF→JPEG変換</title>
+
+  <meta name="description" content="PDF圧縮・PDFをJPEGに変換できる無料オンラインツール。すべての処理がブラウザ内で完結し、アップロード不要で安全。スマホ・PC対応。">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <!-- Search Console -->
+  <meta name="google-site-verification" content="cblGyKe8u_P_jGL-Jqw0_tqURcwRZ_4dW379GVVuG0c">
+
+  <!-- AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6769343629657319">
-  <title>PDFをJPEGに変換｜無料・安全・高速のオンライン変換ツール</title>
 
-  <meta name="description" content="PDFを無料でJPEG画像に変換できるオンラインツール。アップロード不要で安全、すべての処理がブラウザ内で完結します。スマホ・PC対応で高速変換できます。">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
-        integrity="sha512-q+4liFwdPC/bNdhUpZx6aXDx/h77yEQtn4I1slHydcbZK34nLaR3cAeYSJshoxIOq3mjEf7xJE8YWIUHMn+oCQ=="
-        crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
-        integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
-        crossorigin="anonymous"></script>
-
-  <meta http-equiv="Content-Security-Policy"
-      content="
-        default-src 'self' blob:;
-        script-src 'self' https://cdnjs.cloudflare.com 'unsafe-eval' blob:;
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' data:;
-        font-src 'self';
-        connect-src 'self' blob:;
-        worker-src 'self' blob:;
-        child-src 'none';
-        frame-ancestors 'none';
-        object-src 'none';
-        base-uri 'self';
-        form-action 'self';
-      ">
-
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-
-    #container {
-      background: white;
-      width: 90%;
-      max-width: 600px;
-      margin-top: 40px;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    button {
-  display: inline-block;
-  width: 260px;
-  min-height: 48px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: none;
-  background: #4caf50;
-  color: white;
-  cursor: pointer;
-  white-space: normal;
-
-  /* ← スマホで縦並びになったときの余白 */
-  margin-bottom: 12px;
-}
-
-/* スマホ用のレイアウト調整 */
-@media (max-width: 600px) {
-  button {
-    width: 100%;       /* スマホでは全幅にして押しやすく */
-    font-size: 18px;   /* 読みやすく */
-  }
-}
-@media (max-width: 600px) {
-  #dropArea {
-    display: none;
-  }
-}
-@media (max-width: 600px) {
-  #folderButton {
-    display: none;
-  }
-}
-.note {
-  max-width: 600px;     /* 横幅の上限 */
-  margin: 12px auto;    /* 中央揃え（左右auto） */
-  padding: 0 12px;      /* 左右の余白 */
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-  text-align: center;   /* ← 中央揃え */
-}
-.note2 {
-  max-width: 600px;     /* 横幅の上限 */
-  margin: 12px auto;    /* 中央揃え（左右auto） */
-  padding: 0 12px;      /* 左右の余白 */
-  font-size: 12px;
-  color: #666;
-  line-height: 1.6;
-  text-align: center;   /* ← 中央揃え */
-}
-    button:hover {
-      background: #45a049;
-    }
-
-    button:disabled {
-      background: #bdbdbd;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-
-    #progressContainer {
-      width: 100%;
-      margin: 20px auto;
-      background: #eee;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    #progressBar {
-      height: 100%;
-      width: 0%;
-      background: #4caf50;
-      transition: width 0.2s;
-    }
-
-    #thumbs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-      justify-content: center;
-    }
-
-    .thumb {
-      width: 150px;
-      border: 1px solid #ccc;
-      padding: 5px;
-      cursor: pointer;
-      background: white;
-      border-radius: 6px;
-    }
-
-    .thumb img {
-      width: 100%;
-      border-radius: 4px;
-    }
-
-    /* ▼ 保存ボタンのフェードイン */
-    #download {
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      display: none;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: #2196f3;
-      color: white;
-      border-radius: 6px;
-      font-size: 16px;
-      text-decoration: none;
-    }
-
-    #download.show {
-      opacity: 1;
-    }
-
-    #download:hover {
-      background: #1976d2;
-    }
-
-    #resetBtn {
-      display: none;
-      margin-top: 15px;
-      padding: 12px 24px;
-      background: #9e9e9e;
-      color: white;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #resetBtn:hover {
-      background: #757575;
-    }
-
-    #cancelBtn {
-      display: none;
-      margin-top: 15px;
-      padding: 12px 24px;
-      background: #e53935;
-      color: white;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #cancelBtn:hover {
-      background: #c62828;
-    }
-
-    #completeMsg {
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      color: #4caf50;
-      font-size: 1em;
-      margin-top: 15px;
-      display: none;
-    }
-
-    #completeMsg.show {
-      opacity: 1;
-    }
-    /* ▼ ドラッグ中の背景変化（任意だけどおすすめ） */
-    body.dragover {background: #e3f2fd;
-    }
-    #dropArea {
-  margin-top: 20px;
-  padding: 40px 20px;
-  border: 2px dashed #90caf9;
-  border-radius: 10px;
-  background: #ffffff;
-  color: #1976d2;
-  font-size: 1em;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-#dropArea.dragover {
-  background: #e3f2fd;
-  border-color: #42a5f5;
-  color: #0d47a1;
-}
-.info-section {
-  margin-top: 40px;
-  padding: 20px;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.7;
-  background: #fafafa;
-  border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  text-align: left;   /* ← これだけで左揃え */
-}
-
-.info-section h3 {
-  margin-top: 20px;
-  font-size: 16px;
-  color: #333;
-}
-footer {
-  margin-top: 60px;
-  padding: 20px 0;
-  border-top: 1px solid #eee;
-  text-align: center;
-  font-size: 0.9em;
-  color: #777;
-}
-
-footer nav a {
-  margin: 0 8px;
-  color: #0066cc;
-  text-decoration: none;
-}
-.main-title {
-  font-size: 20px;   /* 好きなサイズに変更 */
-  font-weight: bold; /* 太さも調整可能 */
-  margin-bottom: 10px;
-}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="container">
 
-    <!-- ▼ SEOの柱となるh1 -->
-    <h1 class="main-title">PDFをJPEGに変換する無料オンラインツール</h1>
+  <!-- ▼ 公式サイト風ヘッダー -->
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="logo">PDF Tools</span>
+    </div>
+  </header>
 
-    <!-- ▼ 元のh2はサブ見出しとして活かす -->
-    <h2>PDF → JPEG変換<br>(1枚でも複数でも変換)</h2>
+  <main class="main-container">
 
-    <p class="note">
-      選択されたファイルやフォルダはサーバーに送信されません。<br>
-      すべてお使いのPCやスマホ内で処理されます。
-    </p>
+    <!-- ▼ ヒーロー（トップの紹介） -->
+    <section class="hero">
+      <h1>無料オンラインPDFツール</h1>
+      <p>
+        PDF圧縮・PDF→JPEG変換など、すべての処理がブラウザ内で完結する安全なツールです。<br>
+        アップロード不要で、スマホ・PCどちらでも利用できます。
+      </p>
+    </section>
 
-<button id="fileButton">PDFファイルを選択</button>
-<button id="folderButton">フォルダを選択</button>
+    <!-- ▼ AdSense（後でコードを貼る場所） -->
+    <div class="adsense-box"></div>
 
-    <input type="file" id="fileInput" accept="application/pdf" multiple style="display:none">
-    <input type="file" id="folderInput" webkitdirectory multiple style="display:none">
+    <!-- ▼ ツール一覧 -->
+    <section class="tools-section">
+      <h2>利用できるツール</h2>
 
-    <div id="dropArea">ここに PDF をドラッグ＆ドロップ</div>
+      <div class="tool-card">
+        <h3>PDF圧縮ツール</h3>
+        <p>PDFファイルを高品質のまま軽量化できます。アップロード不要で安全。</p>
+        <a href="pdf-compressor/" class="tool-btn">開く</a>
+      </div>
 
-    <div id="progressContainer"><div id="progressBar"></div></div>
+      <div class="tool-card">
+        <h3>PDF → JPEG変換</h3>
+        <p>PDFをJPEG画像に高速変換。複数ページにも対応しています。</p>
+        <a href="jpeg-converter/" class="tool-btn">開く</a>
+      </div>
+    </section>
 
-    <p id="completeMsg">変換が完了しました！</p>
+    <!-- ▼ サイト説明 -->
+    <section class="info-section">
+      <h2>このサイトについて</h2>
+      <p>
+        当サイトは、PDFや画像を安全に変換できる無料ツールを提供しています。<br>
+        すべての処理がブラウザ内で行われるため、プライバシー面でも安心してご利用いただけます。
+      </p>
 
-    <a id="download">保存</a>
-    <p id="downloadNote" style="display:none; color:gray; font-size:0.85em;">
-      ※保存されなかった変換データは、ページを閉じると自動的に消去されます。
-    </p>
+      <h3>今後のアップデート予定</h3>
+      <ul>
+        <li>PDF結合ツール</li>
+        <li>PDF分割ツール</li>
+        <li>JPEG圧縮ツール</li>
+      </ul>
+    </section>
 
-    <button id="cancelBtn">キャンセル</button>
-    <button id="resetBtn">リセット</button>
+  </main>
 
-    <p class="note2">
-      ※データが大きいと、時間がかかる場合があります。<br>
-      ※ご利用の端末によっては、メモリ不足により変換が途中で止まる場合があります。<br>
-      ※iPhoneでページが読み込めない場合、iCloudの「プライベートリレー」をOFFにすると改善することがあります。
-    </p>
+  <!-- ▼ フッター -->
+  <footer class="site-footer">
+    <p>&copy; 2026 jun3</p>
+    <nav>
+      <a href="guide/">使い方</a> |
+      <a href="faq/">FAQ</a> |
+      <a href="about/">運営者情報</a> |
+      <a href="contact/">お問い合わせ</a> |
+      <a href="privacy/">プライバシーポリシー</a>
+    </nav>
+  </footer>
 
-    <div id="thumbs"></div>
-
-    <div class="info-section">
-<h3>■ なぜ無料でつかえるのか？</h3>
-  <p>
-    このツールはサーバーを一切使わず、すべての処理をあなたの端末の中だけで実行しています。
-    そのため、サーバーの維持費・通信費・ストレージ費用が発生しません。
-  </p>
-  <p>
-    一般的なオンライン変換サービスは、<br>
-    ・アップロードされたファイルをサーバーで処理<br>
-    ・変換結果をサーバーからダウンロード<br>
-    という仕組みのため、運営側にコストがかかります。
-  </p>
-  <p>
-    しかしこのツールは、ブラウザ内で PDF を読み込み、画像に変換し、保存するところまですべてローカルで完結するため、
-    運営側のコストがゼロに近く、無料で提供できます。
-  </p>
-
-  <h3>■ アップロード不要</h3>
-  <p>
-    このツールはサーバーを使用していないため、アップロード不要です。
-  </p>
-  <p>
-    ・PDF はあなたの端末から外に出ない<br>
-    ・インターネットを経由しない<br>
-    ・変換処理はすべてあなたのブラウザのメモリ上で完結する<br>
-  </p>
-  <p>
-    そのため、サーバーへのアップロードが無く、プライバシー面で優れています。
-  </p>
-
-  <!-- 内部リンク（SEO強化） -->
-  <p>詳しい使い方は <a href="guide/">こちら</a> をご覧ください。</p>
-  <p>よくある質問は <a href="faq/">FAQページ</a> にまとめています。</p>
-</div>
-
-    <footer>
-      <p>&copy; 2026 jun3</p>
-      <nav>
-        <a href="guide/">使い方</a> |
-        <a href="faq/">FAQ</a> |
-        <a href="about/">運営者情報</a> |
-        <a href="contact/">お問い合わせ</a> |
-        <a href="privacy/">プライバシーポリシー</a> |
-      </nav>
-    </footer>
-
-  </div>
-  <script src="main.js"></script>
 </body>
 </html>
