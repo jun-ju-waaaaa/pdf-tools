@@ -1,0 +1,166 @@
+/* ============================
+   全体レイアウト
+============================ */
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+.main-container {
+  width: 92%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 0 60px;
+}
+
+/* ============================
+   ヘッダー
+============================ */
+
+.site-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 14px 0;
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+/* ============================
+   ヒーローセクション
+============================ */
+
+.hero {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+
+.hero h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+}
+
+/* ============================
+   ツール一覧
+============================ */
+
+.tools-section {
+  margin-top: 40px;
+}
+
+.tools-section h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tool-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.tool-card h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.tool-card p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.tool-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 20px;
+  background: #2196f3;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.tool-btn:hover {
+  background: #1976d2;
+}
+
+/* ============================
+   情報セクション
+============================ */
+
+.info-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 40px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.info-section h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+.info-section ul {
+  padding-left: 20px;
+}
+
+/* ============================
+   フッター
+============================ */
+
+.site-footer {
+  background: #fafafa;
+  border-top: 1px solid #e5e5e5;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+}
+
+.site-footer nav a {
+  color: #0066cc;
+  text-decoration: none;
+  margin: 0 6px;
+}
+
+/* ============================
+   スマホ最適化
+============================ */
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 22px;
+  }
+
+  .tool-card {
+    padding: 18px;
+  }
+
+  .tool-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
