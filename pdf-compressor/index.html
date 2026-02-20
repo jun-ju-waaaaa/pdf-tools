@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>PDFを圧縮｜無料・安全・高速のオンラインPDF圧縮ツール</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="wjbUCUovh1Qbnv4qczntyVJstAfRlQh7R6nQk2jWIU8">
+  <meta name="google-adsense-account" content="ca-pub-6769343629657319">
+
+  <meta name="description" content="PDFファイルを無料で圧縮できるオンラインツール。アップロード不要で安全、すべての処理がブラウザ内で完結します。スマホ・PC対応で高速にPDFを軽量化できます。">
+
+  <!-- pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+          crossorigin="anonymous"></script>
+
+  <!-- pdf-lib -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- JSZip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+          crossorigin="anonymous"></script>
+
+  <!-- CSP（外部CDN + blob のみ許可） -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+        default-src 'self' blob:;
+        script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-eval' blob:;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: blob:;
+        font-src 'self';
+        connect-src 'self' blob:;
+        worker-src 'self' https://cdnjs.cloudflare.com blob:;
+        child-src 'none';
+        frame-ancestors 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+      ">
+
+  <!-- 外部CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="container">
+
+    <h1 class="main-title">PDFを圧縮する無料オンラインツール</h1>
+    <h2>PDF圧縮ツール<br>（ファイルサイズを小さくして軽量化）</h2>
+
+    <p class="note">
+      選択されたPDFファイルはサーバーに送信されません。<br>
+      すべてお使いのPCやスマホ内で処理されます。
+    </p>
+
+<!-- 画質プリセット選択（小さい順に並び替え） -->
+<div id="qualityBox">
+  <p style="margin-bottom:10px; font-weight:600;">画質を選択</p>
+
+  <label>
+    <input type="radio" name="qualityPreset" value="min">
+    72dpi（最小）
+  </label><br>
+
+  <label>
+    <input type="radio" name="qualityPreset" value="mobile">
+    96dpi（スマホ画面）
+  </label><br>
+
+  <label>
+    <input type="radio" name="qualityPreset" value="pc" checked>
+    144dpi（パソコン画面）
+  </label><br>
+
+  <label>
+    <input type="radio" name="qualityPreset" value="print">
+    200dpi（印刷用）
+  </label><br>
+
+<label class="pc-only">
+  <input type="radio" name="qualityPreset" value="pc-hi">
+  300dpi（最大画質）
+</label>
+</div>
+
+    <!-- ファイル選択ボタン -->
+    <button id="fileButton">PDFファイルを選択</button>
+    <input type="file" id="fileInput" accept="application/pdf" multiple style="display:none">
+
+    <!-- ドラッグ＆ドロップ（複数対応） -->
+    <div id="dropArea">ここに PDF をドラッグ＆ドロップ（複数可）</div>
+
+    <!-- 進捗バー -->
+    <div id="progressContainer"><div id="progressBar"></div></div>
+
+    <!-- 完了メッセージ -->
+    <p id="completeMsg">圧縮が完了しました！</p>
+
+    <!-- ダウンロードリンク（単体 or ZIP） -->
+    <a id="download">圧縮後のPDFを保存</a>
+    <p id="downloadNote" style="display:none; color:gray; font-size:0.85em;">
+      ※保存されなかった変換データは、ページを閉じると自動的に消去されます。
+    </p>
+
+    <!-- 操作ボタン -->
+    <button id="cancelBtn">キャンセル</button>
+    <button id="resetBtn">リセット</button>
+
+    <p class="note2">
+      ※ページ数や画像が多いPDFは、圧縮に時間がかかる場合があります。<br>
+      ※ご利用の端末によっては、メモリ不足により処理が途中で止まる場合があります。<br>
+      ※iPhoneでページが読み込めない場合、iCloudの「プライベートリレー」をOFFにすると改善することがあります。
+    </p>
+
+    <div class="info-section">
+      <h3>■ このPDF圧縮ツールの特徴</h3>
+      <p>
+        このツールは、PDFの各ページを一度画像として描画し、JPEG形式に再圧縮したうえで、
+        新しいPDFとして再生成することでファイルサイズを小さくします。
+      </p>
+      <p>
+        そのため、画像が多いPDFやスキャンPDFのようなファイルでは、
+        サイズ削減の効果が出やすいのが特徴です。
+      </p>
+
+      <h3>■ なぜ無料で使えるのか？</h3>
+      <p>
+        このツールはサーバーを一切使わず、すべての処理をあなたの端末の中だけで実行しています。
+        そのため、サーバーの維持費・通信費・ストレージ費用が発生しません。
+      </p>
+
+      <h3>■ アップロード不要で安全</h3>
+      <p>
+        ・PDF はあなたの端末から外に出ない<br>
+        ・インターネットを経由しない<br>
+        ・圧縮処理はすべてブラウザ内で完結<br>
+      </p>
+
+      <p>詳しい使い方は <a href="guide/">こちら</a> をご覧ください。</p>
+      <p>よくある質問は <a href="faq/">FAQページ</a> にまとめています。</p>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 jun3</p>
+      <nav>
+        <a href="guide/">使い方</a> |
+        <a href="faq/">FAQ</a> |
+        <a href="about/">運営者情報</a> |
+        <a href="contact/">お問い合わせ</a> |
+        <a href="privacy/">プライバシーポリシー</a> |
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- 外部JS -->
+  <script src="main.js"></script>
+</body>
+</html>
