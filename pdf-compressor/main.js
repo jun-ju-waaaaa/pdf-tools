@@ -1,5 +1,5 @@
 // ===============================
-// PDF圧縮ツール main.js（スマホ最適化版 完全版）
+// PDF圧縮ツール main.js（スマホ複数PDF対応・個別DL方式 完全版）
 // ===============================
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -38,7 +38,7 @@ function getPresetSettings() {
       setting = { dpi: 144, quality: 0.6 };
       break;
 
-    case "pc-hi": // PCのみ300dpi
+    case "pc-hi":
       setting = { dpi: 300, quality: 0.8 };
       break;
 
@@ -80,6 +80,10 @@ function resetUI() {
   completeMsg.style.display = "none";
   completeMsg.classList.remove("show");
 
+  // ★ 完了リストをクリア
+  const list = document.getElementById("completeList");
+  if (list) list.innerHTML = "";
+
   document.getElementById("resetBtn").style.display = "none";
   document.getElementById("cancelBtn").style.display = "none";
   document.getElementById("downloadNote").style.display = "none";
@@ -104,12 +108,10 @@ async function compressPDF(file) {
 
     const page = await pdf.getPage(i);
 
-    // 元のページサイズ（pt）
     const originalViewport = page.getViewport({ scale: 1 });
     const pageWidth = originalViewport.width;
     const pageHeight = originalViewport.height;
 
-    // DPIに応じてレンダリング
     const renderViewport = page.getViewport({ scale });
 
     const canvas = document.createElement("canvas");
@@ -122,7 +124,6 @@ async function compressPDF(file) {
     const jpegDataUrl = canvas.toDataURL("image/jpeg", quality);
     const jpegBytes = dataURLToUint8Array(jpegDataUrl);
 
-    // 新しいPDFページは元のサイズのまま
     const newPage = newPdf.addPage([pageWidth, pageHeight]);
     const embeddedJpeg = await newPdf.embedJpg(jpegBytes);
 
@@ -133,7 +134,6 @@ async function compressPDF(file) {
       height: pageHeight
     });
 
-    // ★ canvasを破棄（スマホのメモリ節約）
     canvas.width = 1;
     canvas.height = 1;
 
@@ -181,18 +181,13 @@ async function handleSingle(file) {
 }
 
 // ===============================
-// 複数PDF → ZIP（PCのみ）
+// 複数PDF → 個別ダウンロード方式（スマホ対応）
 // ===============================
 async function handleMultiple(files) {
-  if (isMobile) {
-    alert("スマホでは複数PDFの同時圧縮はできません。1つずつ選択してください。");
-    return;
-  }
-
   resetUI();
   document.getElementById("cancelBtn").style.display = "inline-block";
 
-  const zip = new JSZip();
+  const list = document.getElementById("completeList");
 
   for (const file of files) {
     if (isCanceled) break;
@@ -200,32 +195,25 @@ async function handleMultiple(files) {
     const result = await compressPDF(file);
     if (!result) break;
 
-    const arrayBuffer = await result.arrayBuffer();
-    zip.file(file.name.replace(/\.pdf$/i, "_compressed.pdf"), arrayBuffer);
+    const url = URL.createObjectURL(result);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name.replace(/\.pdf$/i, "_compressed.pdf");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 
-    const completeMsg = document.getElementById("completeMsg");
-    completeMsg.textContent = `圧縮完了：${file.name}`;
-    completeMsg.style.display = "block";
-    completeMsg.classList.add("show");
+    // ★ 完了リストに追加
+    const li = document.createElement("li");
+    li.textContent = `ダウンロード完了：${file.name}`;
+    list.appendChild(li);
 
-    await new Promise(r => setTimeout(r, 200));
-  }
-
-  if (!isCanceled) {
-    const zipBlob = await zip.generateAsync({ type: "blob" });
-    const url = URL.createObjectURL(zipBlob);
-
-    const downloadLink = document.getElementById("download");
-    downloadLink.href = url;
-    downloadLink.download = "compressed_pdfs.zip";
-    downloadLink.style.display = "inline-block";
-    downloadLink.classList.add("show");
-
-    document.getElementById("downloadNote").style.display = "block";
+    await new Promise(r => setTimeout(r, isMobile ? 300 : 100));
   }
 
   document.getElementById("resetBtn").style.display = "inline-block";
   document.getElementById("cancelBtn").style.display = "none";
+  document.getElementById("downloadNote").style.display = "block";
 
   isCanceled = false;
 }
@@ -241,12 +229,6 @@ document.getElementById("fileButton").addEventListener("click", () => {
 document.getElementById("fileInput").addEventListener("change", (e) => {
   const files = [...e.target.files];
   e.target.value = "";
-
-  // ★ スマホでは複数PDF禁止
-  if (isMobile && files.length > 1) {
-    alert("スマホでは複数PDFの同時圧縮はできません。1つずつ選択してください。");
-    return;
-  }
 
   if (files.length === 1) handleSingle(files[0]);
   else handleMultiple(files);
@@ -272,11 +254,6 @@ dropArea.addEventListener("drop", (e) => {
   document.body.classList.remove("dragover");
 
   const files = [...e.dataTransfer.files].filter(f => f.type === "application/pdf");
-
-  if (isMobile && files.length > 1) {
-    alert("スマホでは複数PDFの同時圧縮はできません。1つずつ選択してください。");
-    return;
-  }
 
   if (files.length === 1) handleSingle(files[0]);
   else handleMultiple(files);
