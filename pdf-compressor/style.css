@@ -316,8 +316,8 @@ footer nav a {
 }
 
 /* スマホ（〜768px）ではPC専用項目を非表示 */
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .pc-only {
-    display: none;
+    display: none !important;
   }
 }

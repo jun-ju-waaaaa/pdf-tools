@@ -14,17 +14,15 @@
   <meta name="description" content="PDFファイルを無料で圧縮できるオンラインツール。アップロード不要で安全、すべての処理がブラウザ内で完結します。スマホ・PC対応で高速にPDFを軽量化できます。">
 
   <!-- pdf.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
-          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
 
   <!-- pdf-lib -->
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 
-  <!-- JSZip -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
-          crossorigin="anonymous"></script>
+  <!-- JSZip（今は使わないが残してOK） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous"></script>
 
-  <!-- CSP（外部CDN + blob のみ許可） -->
+  <!-- CSP -->
   <meta http-equiv="Content-Security-Policy"
         content="
         default-src 'self' blob:;
@@ -49,8 +47,7 @@
   <div id="container">
 
     <h1 class="main-title">PDF圧縮</h1>
-    <h2>ブラウザ完結型
-      <br>PDF圧縮ツール</h2>
+    <h2>ブラウザ完結型<br>PDF圧縮ツール</h2>
 
     <p class="note">
       選択されたPDFは外部に送信されません。<br>
@@ -58,104 +55,76 @@
       日本製のため不可解な日本語を目にすることはありません。
     </p>
 
-<!-- 画質プリセット選択（小さい順に並び替え） -->
-<div id="qualityBox">
-  <p style="margin-bottom:10px; font-weight:600;">画質を選択</p>
+    <!-- 画質プリセット -->
+    <div id="qualityBox">
+      <p style="margin-bottom:10px; font-weight:600;">圧縮後の画質を選択</p>
 
-  <label>
-    <input type="radio" name="qualityPreset" value="min">
-    72dpi（最小）
-  </label><br>
+      <label><input type="radio" name="qualityPreset" value="min">72dpi（最小）</label><br>
+      <label><input type="radio" name="qualityPreset" value="mobile">96dpi（スマホ画面）</label><br>
+      <label><input type="radio" name="qualityPreset" value="pc" checked>144dpi（パソコン画面）</label><br>
+      <label><input type="radio" name="qualityPreset" value="print">200dpi（印刷用）</label><br>
+      <label class="pc-only"><input type="radio" name="qualityPreset" value="pc-hi">300dpi（最大画質）</label>
+    </div>
 
-  <label>
-    <input type="radio" name="qualityPreset" value="mobile">
-    96dpi（スマホ画面）
-  </label><br>
-
-  <label>
-    <input type="radio" name="qualityPreset" value="pc" checked>
-    144dpi（パソコン画面）
-  </label><br>
-
-  <label>
-    <input type="radio" name="qualityPreset" value="print">
-    200dpi（印刷用）
-  </label><br>
-
-<label class="pc-only">
-  <input type="radio" name="qualityPreset" value="pc-hi">
-  300dpi（最大画質）
-</label>
-</div>
-
-    <!-- ファイル選択ボタン -->
+    <!-- ファイル選択 -->
     <button id="fileButton">PDFファイルを選択</button>
     <input type="file" id="fileInput" accept="application/pdf" multiple style="display:none">
 
-    <!-- ドラッグ＆ドロップ（複数対応） -->
-    <div id="dropArea">ここに PDF をドラッグ＆ドロップ（複数可）</div>
+    <!-- ドラッグ＆ドロップ -->
+    <div id="dropArea" class="pc-only">ここに PDF をドラッグ＆ドロップ（複数可）</div>
 
     <!-- 進捗バー -->
     <div id="progressContainer"><div id="progressBar"></div></div>
 
     <!-- 完了メッセージ -->
-    <p id="completeMsg">圧縮が完了しました！</p>
-    <ul id="completeList" style="margin-top:15px; text-align:left; font-size:14px;"></ul>
+    <p id="completeMsg" style="display:none;">圧縮が完了しました！</p>
 
+    <!-- ★ キャンセルメッセージ（追加） -->
+    <p id="cancelMsg" style="display:none; color:#e53935; font-weight:bold; margin-top:15px;">
+      キャンセルされました
+    </p>
 
-    <!-- ダウンロードリンク（単体 or ZIP） -->
-    <a id="download">圧縮後のPDFを保存</a>
+    <!-- 複数PDFの保存ボタンリスト -->
+    <ul id="completeList" style="margin-top:15px; text-align:left; font-size:14px; list-style:none; padding:0;"></ul>
+
+    <!-- 単体PDFダウンロード -->
+    <a id="download" style="display:none;">圧縮後のPDFを開く</a>
+
     <p id="downloadNote" style="display:none; color:gray; font-size:0.85em;">
       ※保存されなかった変換データは、ページを閉じると自動的に消去されます。
     </p>
 
     <!-- 操作ボタン -->
-    <button id="cancelBtn">キャンセル</button>
-    <button id="resetBtn">リセット</button>
+    <button id="cancelBtn" style="display:none;">キャンセル</button>
+    <button id="resetBtn" style="display:none;">リセット</button>
 
     <p class="note2">
       ※ページ数や画像が多いPDFは、圧縮に時間がかかる場合があります。<br>
-      ※ご利用の端末によっては、メモリ不足により処理が途中で止まる場合があります。<br>
-    
+      ※ご利用の端末によっては、メモリ不足により処理が途中で止まる場合があります。
     </p>
 
     <div class="info-section">
       <h3>■ このPDF圧縮ツールの特徴</h3>
-      <p>
-        このツールは、PDFの各ページを一度画像として描画し、JPEG形式に再圧縮したうえで、
-        新しいPDFとして再生成することでファイルサイズを小さくします。
-      </p>
-      <p>
-        そのため、画像が多いPDFやスキャンPDFのようなファイルでは、
-        サイズ削減の効果が出やすいのが特徴です。
-      </p>
+      <p>このツールは、PDFの各ページを画像化し、JPEGとして再圧縮してPDFを再生成することでサイズを削減します。</p>
 
       <h3>■ なぜ無料で使えるのか？</h3>
-      <p>
-        このツールはサーバーを一切使わず、すべての処理をあなたの端末の中だけで実行しています。
-        そのため、サーバーの維持費・通信費・ストレージ費用が発生しません。
-      </p>
+      <p>すべての処理が端末内で完結するため、サーバー費用が発生しません。</p>
 
-      <h3>■ アップロード不要で安全</h3>
-      <p>
-        ・PDF はあなたの端末から外に出ない<br>
-        ・インターネットを経由しない<br>
-        ・圧縮処理はすべてブラウザ内で完結<br>
-      </p>
 
-      <p>詳しい使い方は <a href="guide/">こちら</a> をご覧ください。</p>
-      <p>よくある質問は <a href="faq/">FAQページ</a> にまとめています。</p>
+
+      <p>詳しい使い方は <a href="guide/">こちら</a></p>
+      <p>FAQは <a href="faq/">こちら</a></p>
     </div>
 
     <footer>
       <p>&copy; 2026 jun3</p>
       <nav>
-<a href="/">ホーム</a>
-<a href="/guide/">使い方</a>
-<a href="/faq/">FAQ</a>
-<a href="/about/">運営者情報</a>
-<a href="/contact/">お問い合わせ</a>
-<a href="/privacy/">プライバシーポリシー</a>
+        <a href="/">ホーム</a>
+        <a href="/guide/">使い方</a>
+        <a href="/faq/">FAQ</a>
+        <a href="/about/">運営者情報</a>
+        <a href="/contact/">お問い合わせ</a>
+        <a href="/privacy/">プライバシーポリシー</a>
       </nav>
     </footer>
 
